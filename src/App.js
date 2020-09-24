@@ -20,7 +20,7 @@ class App extends Component {
       allowClick: false,
     });
     const start = new Date();
-    const pages = await wiki().random(100);
+    const pages = await wiki().random(1000000);
     const searched = [];
     let greatest = [
       { length: 0, title: "", link: "" },
@@ -31,11 +31,14 @@ class App extends Component {
     });
     const final = await Promise.all(searched);
     final.forEach((p) => {
-      if (p.raw.length > greatest[0].length) {
+      if (p.raw.length > greatest[0].length && !p.raw.title.includes("List")) {
         greatest[0].title = p.raw.title;
         greatest[0].length = p.raw.length;
         greatest[0].link = p.raw.fullurl;
-      } else if (p.raw.length > greatest[1].length) {
+      } else if (
+        p.raw.length > greatest[1].length &&
+        !p.raw.title.includes("List")
+      ) {
         greatest[1].title = p.raw.title;
         greatest[1].length = p.raw.length;
         greatest[1].link = p.raw.fullurl;
@@ -55,9 +58,13 @@ class App extends Component {
   render() {
     return (
       <main>
-        <button onClick={() => this.getInfo()}>get info</button>
-        <a href={this.state.linkOne}>{this.state.one}</a>
-        <a href={this.state.linkTwo}>{this.state.two}</a>
+        <button onClick={() => this.getInfo()}>get links</button>
+        <a href={this.state.linkOne} target="_blank" rel="noopener noreferrer">
+          {this.state.one}
+        </a>
+        <a href={this.state.linkTwo} target="_blank" rel="noopener noreferrer">
+          {this.state.two}
+        </a>
       </main>
     );
   }

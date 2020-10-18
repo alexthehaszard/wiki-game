@@ -40,6 +40,10 @@ p {
   height: 65%;
 }
 
+a {
+  color: var(--primary);
+}
+
 .link-button {
   background: var(--secondary);
   border: 0;

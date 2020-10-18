@@ -9,7 +9,11 @@ class WikiPage extends Component {
   render() {
     return (
       <div className="wiki-page">
-        <h1>{this.props.title}</h1>
+        <h1>
+          <a target="_blank" href={this.props.link}>
+            {this.props.title}
+          </a>
+        </h1>
         <p>{this.props.description}</p>
         <button className={this.props.classes} onClick={this.props.handleClick}>
           Get new page

@@ -101,12 +101,14 @@ class App extends Component {
               description={this.state.descOne}
               classes="wiki-page-button b1"
               handleClick={() => this.getInfo([true, false])}
+              link={this.state.linkOne}
             />
             <WikiPage
               title={this.state.two}
               description={this.state.descTwo}
               classes="wiki-page-button b2"
               handleClick={() => this.getInfo([false, true])}
+              link={this.state.linkTwo}
             />
           </div>
         </main>

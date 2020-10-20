@@ -37,7 +37,11 @@ class App extends Component {
     const final = await Promise.all(searched);
     final.forEach((p) => {
       console.log(p);
-      if (p.raw.length > greatest[0].length && !p.raw.title.includes("List")) {
+      if (
+        p.raw.length > greatest[0].length &&
+        !p.raw.title.includes("List") &&
+        !p.raw.title.includes("Glossary")
+      ) {
         greatest[0].raw = p;
         greatest[0].title = p.raw.title;
         greatest[0].length = p.raw.length;

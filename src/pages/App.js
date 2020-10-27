@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import "./App.css";
-import WikiPage from "./components/wikiPage";
+import "../App.css";
+import WikiPage from "../components/wikiPage";
 import wiki from "wikijs";
 
 class App extends Component {
@@ -8,12 +8,12 @@ class App extends Component {
     super();
     this.state = {
       allowClick: true,
-      one: "Wiki Page 1",
-      two: "Wiki Page 2",
-      linkOne: "#",
-      linkTwo: "#",
-      descOne: "This is a description of a wiki page.",
-      descTwo: "This is a description of a wiki page.",
+      titles: ["Wiki Page 1", "Wiki Page 2"],
+      links: ["#", "#"],
+      descriptions: [
+        "This is a description of a wiki page.",
+        "This is a description of a wiki page.",
+      ],
       isLoading: "d-none",
     };
   }
@@ -25,6 +25,8 @@ class App extends Component {
       isLoading: "",
     });
     const start = new Date();
+
+    // get a million pages as it is the same speed to get one page as it is to get 1 million so we can have more variation
     const pages = await wiki().random(1000000);
     const searched = [];
     let greatest = [
@@ -35,6 +37,8 @@ class App extends Component {
       return searched.push(wiki().page(p));
     });
     const final = await Promise.all(searched);
+
+    // get the largest articles and put them in an array for later use
     final.forEach((p) => {
       console.log(p);
       if (
@@ -42,18 +46,23 @@ class App extends Component {
         !p.raw.title.includes("List") &&
         !p.raw.title.includes("Glossary")
       ) {
-        greatest[0].raw = p;
-        greatest[0].title = p.raw.title;
-        greatest[0].length = p.raw.length;
-        greatest[0].link = p.raw.fullurl;
+        greatest[0] = {
+          raw: p,
+          title: p.raw.title,
+          length: p.raw.length,
+          link: p.raw.fullurl,
+        };
       } else if (
         p.raw.length > greatest[1].length &&
-        !p.raw.title.includes("List")
+        !p.raw.title.includes("List") &&
+        !p.raw.title.includes("Glossary")
       ) {
-        greatest[1].raw = p;
-        greatest[1].title = p.raw.title;
-        greatest[1].length = p.raw.length;
-        greatest[1].link = p.raw.fullurl;
+        greatest[1] = {
+          raw: p,
+          title: p.raw.title,
+          length: p.raw.length,
+          link: p.raw.fullurl,
+        };
       }
     });
     const titles = [];
@@ -61,25 +70,23 @@ class App extends Component {
       return titles.push(p.raw.summary());
     });
     const descs = await Promise.all(titles);
-    console.log(greatest);
-    if (infoChange[0]) {
-      this.setState({
-        one: greatest[1].title,
-        linkOne: greatest[1].link,
-        descOne: descs[1].substring(0, 400) + "...",
-        allowClick: true,
-        isLoading: "d-none",
-      });
+    // reverse the greatest array so that the right item is the largest
+    greatest.reverse();
+    descs.reverse();
+
+    // update the state of the component by making a new state with all of the new information
+    const tempState = this.state;
+    for (let i = 0; i < infoChange.length; i++) {
+      if (infoChange[i]) {
+        tempState.titles[i] = greatest[i].title;
+        tempState.links[i] = greatest[i].link;
+        tempState.descriptions[i] = descs[i].substring(0, 400) + "...";
+      }
     }
-    if (infoChange[1]) {
-      this.setState({
-        two: greatest[0].title,
-        linkTwo: greatest[0].link,
-        descTwo: descs[0].substring(0, 400) + "...",
-        allowClick: true,
-        isLoading: "d-none",
-      });
-    }
+    tempState.allowClick = true;
+    tempState.isLoading = "d-none";
+    this.setState(tempState);
+
     console.log("elapsed:", new Date() - start);
   }
 
@@ -89,9 +96,6 @@ class App extends Component {
         <div className={"loader" + this.state.isLoading}></div>
         <div className={"container" + this.state.isLoading}></div>
 
-        <nav>
-          <h1>Wiki Races!</h1>
-        </nav>
         <main>
           <button
             onClick={() => this.getInfo([true, true])}
@@ -101,18 +105,18 @@ class App extends Component {
           </button>
           <div className="wiki-page-container">
             <WikiPage
-              title={this.state.one}
-              description={this.state.descOne}
+              title={this.state.titles[0]}
+              description={this.state.descriptions[0]}
               classes="wiki-page-button b1"
               handleClick={() => this.getInfo([true, false])}
-              link={this.state.linkOne}
+              link={this.state.links[0]}
             />
             <WikiPage
-              title={this.state.two}
-              description={this.state.descTwo}
+              title={this.state.titles[1]}
+              description={this.state.descriptions[1]}
               classes="wiki-page-button b2"
               handleClick={() => this.getInfo([false, true])}
-              link={this.state.linkTwo}
+              link={this.state.links[1]}
             />
           </div>
         </main>

@@ -10,7 +10,7 @@ class WikiPage extends Component {
     return (
       <div className="wiki-page">
         <h1>
-          <a target="_blank" href={this.props.link}>
+          <a target="_blank" rel="noopener noreferrer" href={this.props.link}>
             {this.props.title}
           </a>
         </h1>

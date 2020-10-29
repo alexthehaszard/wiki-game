@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import React from "react";
 import App from "./pages/App";
 import Rules from "./pages/Rules";
+import About from "./pages/About";
 
 export default function Main() {
   return (
@@ -9,7 +10,7 @@ export default function Main() {
       <div>
         <nav>
           <h3>
-            <Link to="/">About the game</Link>
+            <Link to="/about">About the game</Link>
           </h3>
 
           <h1>
@@ -22,6 +23,10 @@ export default function Main() {
         </nav>
 
         <Switch>
+          <Route path="/about">
+            <About />
+          </Route>
+
           <Route path="/rules">
             <Rules />
           </Route>

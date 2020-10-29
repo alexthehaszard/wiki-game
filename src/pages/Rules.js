@@ -4,7 +4,7 @@ class Rules extends Component {
   state = {};
   render() {
     return (
-      <div className="rules">
+      <div className="box">
         <h1>The rules of Wiki Races</h1>
         <ul>
           <li>You cannot use Search</li>

@@ -140,7 +140,7 @@ a {
   background: rgba(0, 0, 0, 0.5);
 }
 
-.rules {
+.box {
   background-color: var(--secondary);
   position: relative;
   text-align: center;
